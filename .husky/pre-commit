@@ -1,0 +1,4 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+${PRE_COMMIT:-docker-compose run --rm app npx lint-staged}
