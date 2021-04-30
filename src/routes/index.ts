@@ -1,13 +1,13 @@
-import { Router, Request, Response, NextFunction } from 'express';
+import { Router, Request, Response } from 'express';
 
 const indexRouter: Router = Router();
 
 /* GET home page. */
 indexRouter.get(
-  '/',
-  (req: Request, res: Response, next: NextFunction): Response => {
+  '/version',
+  (req: Request, res: Response): Response => {
     return res.status(200).json({
-      message: 'Hello world!',
+      version: process.env.npm_package_version,
     });
   }
 );
