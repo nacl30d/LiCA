@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import logger from '../libs/winston';
+import logger from 'libs/winston';
 
 const indexRouter: Router = Router();
 
