@@ -1,6 +1,6 @@
 {
   "name": "lica",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "private": true,
   "description": "LINE Club Assistant",
   "author": "Norden Wind Ensemble",
@@ -8,10 +8,11 @@
   "main": "src/app.ts",
   "scripts": {
     "start": "npm run start:${NODE_ENV:-develop}",
-    "start:production": "node dist/server.ts",
+    "start:production": "NODE_PATH=./dist node dist/server.js",
+    "start:staging": "NODE_PATH=./dist node dist/server.js",
     "start:development": "ts-node-dev -r tsconfig-paths/register --watch src src/server.ts",
     "clean": "rimraf dist",
-    "compile": "tsc src",
+    "compile": "tsc",
     "build": "npm run clean && npm run compile",
     "lint": "eslint src --ext .js,.ts",
     "lint:fix": "eslint src --ext .js,.ts --fix",
@@ -21,7 +22,6 @@
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
-    "debug": "~2.6.9",
     "express": "~4.16.1",
     "morgan": "~1.9.1",
     "winston": "^3.3.3"
