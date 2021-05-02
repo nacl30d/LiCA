@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import logger from 'libs/winston';
+import lineRouter from './line.router';
 
 const indexRouter: Router = Router();
 
@@ -15,5 +16,7 @@ indexRouter.get(
     });
   }
 );
+
+indexRouter.use('/line', lineRouter);
 
 export default indexRouter;
