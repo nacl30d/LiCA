@@ -11,6 +11,7 @@
     "start:production": "NODE_PATH=./dist node dist/server.js",
     "start:staging": "NODE_PATH=./dist node dist/server.js",
     "start:development": "ts-node-dev -r tsconfig-paths/register --watch src src/server.ts",
+    "type-check": "tsc --noEmit",
     "clean": "rimraf dist",
     "compile": "tsc",
     "build": "npm run clean && npm run compile",
