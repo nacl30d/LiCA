@@ -4,7 +4,7 @@ services:
     build: .
     command: npm start
     environment:
-      NODE_ENV: ${NODE_ENV:-develop}
+      NODE_ENV: ${NODE_ENV:-development}
     volumes:
       - ./:/app
       - /app/node_modules
