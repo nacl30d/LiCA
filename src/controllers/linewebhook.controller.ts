@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import {
   LINE_SIGNATURE_HTTP_HEADER_NAME,
+  SignatureValidationFailed,
   WebhookEvent,
   WebhookRequestBody,
 } from '@line/bot-sdk';
@@ -40,14 +41,16 @@ export default class LineWebhookController {
     const signature = req.headers[LINE_SIGNATURE_HTTP_HEADER_NAME] as string;
     if (!signature) {
       logger.error('no signeture.');
-      next(new Error('no signature'));
+      next(new SignatureValidationFailed('no signature'));
       return;
     }
 
     const signedBody = LineService.createSignature(req.body);
     if (signature !== signedBody) {
       logger.error('signature validation failed.', { signature });
-      next(new Error('signature validation failed'));
+      next(
+        new SignatureValidationFailed('signature validation failed', signature)
+      );
       return;
     }
     next();
