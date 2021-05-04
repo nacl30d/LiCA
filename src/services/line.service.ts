@@ -4,11 +4,11 @@ import {
   MessageAPIResponseBase,
   Message,
   MessageEvent,
-  TemplateMessage,
   TextMessage,
   WebhookEvent,
 } from '@line/bot-sdk';
 import LineRepository from 'repositories/line.repository';
+import LineTemplateMessageConst from 'consts/lineTemplateMessage.const';
 import logger from 'libs/winston';
 
 export default class LineService {
@@ -54,27 +54,7 @@ export default class LineService {
   protected static createResponse(text: string): Message {
     switch (text) {
       case '出欠':
-        return {
-          type: 'template',
-          altText: '出欠確認',
-          template: {
-            type: 'buttons',
-            title: '出欠確認',
-            text: '回答をタップしてください',
-            actions: [
-              {
-                type: 'postback',
-                data: 'attend',
-                label: '出席',
-              },
-              {
-                type: 'postback',
-                data: 'absent',
-                label: '欠席',
-              },
-            ],
-          },
-        } as TemplateMessage;
+        return LineTemplateMessageConst.buildAttendanceTemplate();
         break;
       default:
         return {
