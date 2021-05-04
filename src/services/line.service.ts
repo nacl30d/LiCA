@@ -2,7 +2,9 @@ import {
   Client,
   ClientConfig,
   MessageAPIResponseBase,
+  Message,
   MessageEvent,
+  TemplateMessage,
   TextMessage,
   WebhookEvent,
 } from '@line/bot-sdk';
@@ -42,13 +44,43 @@ export default class LineService {
     event: MessageEvent
   ): Promise<MessageAPIResponseBase | undefined> {
     const { replyToken } = event;
-    const text = event.message.type === 'text' ? event.message.text : '';
-
-    const response: TextMessage = {
-      type: 'text',
-      text,
-    };
+    const text: string =
+      event.message.type === 'text' ? event.message.text : '';
+    const response: Message = LineService.createResponse(text);
 
     return await LineService.client.replyMessage(replyToken, response);
+  }
+
+  protected static createResponse(text: string): Message {
+    switch (text) {
+      case '出欠':
+        return {
+          type: 'template',
+          altText: '出欠確認',
+          template: {
+            type: 'buttons',
+            title: '出欠確認',
+            text: '回答をタップしてください',
+            actions: [
+              {
+                type: 'postback',
+                data: 'attend',
+                label: '出席',
+              },
+              {
+                type: 'postback',
+                data: 'absent',
+                label: '欠席',
+              },
+            ],
+          },
+        } as TemplateMessage;
+        break;
+      default:
+        return {
+          type: 'text',
+          text,
+        } as TextMessage;
+    }
   }
 }
