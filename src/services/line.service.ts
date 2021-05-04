@@ -4,6 +4,7 @@ import {
   MessageAPIResponseBase,
   Message,
   MessageEvent,
+  PostbackEvent,
   TextMessage,
   WebhookEvent,
 } from '@line/bot-sdk';
@@ -34,6 +35,9 @@ export default class LineService {
       case 'message':
         return await LineService.handleMessageEvent(event);
         break;
+      case 'postback':
+        return await LineService.handlePostbackEvent(event);
+        break;
       default:
         logger.warn('Unknown event type was sent.', { event });
         return;
@@ -62,5 +66,23 @@ export default class LineService {
           text,
         } as TextMessage;
     }
+  }
+
+  protected static async handlePostbackEvent(
+    event: PostbackEvent
+  ): Promise<MessageAPIResponseBase | undefined> {
+    const { data: dataString }: { data: string } = event.postback;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const data = JSON.parse(dataString);
+    const { userId = '' } = event.source;
+    if (!userId) return;
+
+    const response: TextMessage = {
+      type: 'text',
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions,@typescript-eslint/no-unsafe-member-access
+      text: `You respond "[出欠確認] ${data.event.name}" as ${data.choice.label}!`,
+    };
+
+    return await LineService.client.pushMessage(userId, response);
   }
 }

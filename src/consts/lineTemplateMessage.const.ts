@@ -1,18 +1,18 @@
 import { TemplateMessage } from '@line/bot-sdk';
 
-type Event = {
+interface Event {
   id: number;
   name: string;
   place: string;
   start: string;
   end: string;
   description?: string;
-};
+}
 
-type Choice = {
+interface Choice {
   label: string;
   value: string;
-};
+}
 
 export default class LineTemplateMessageConst {
   public static buildAttendanceTemplate(): TemplateMessage {
@@ -24,10 +24,10 @@ export default class LineTemplateMessageConst {
       end: new Date().toLocaleString('ja-JP'),
     } as Event;
 
-    const choices: Choise[] = [
+    const choices = [
       { label: '出席', value: 'attend' },
       { label: '欠席', value: 'attend' },
-    ];
+    ] as Choice[];
     return {
       type: 'template',
       altText: '出欠確認',
