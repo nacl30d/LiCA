@@ -24,20 +24,21 @@ server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
-
 /**
  * Event listener for HTTP server "error" event.
  */
 
 function onError(error: any) {
-  if (error.syscall !== 'listen') {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const { syscall = '', code = '' }: { syscall: string; code: string } = error;
+  if (syscall !== 'listen') {
     throw error;
   }
 
   const bind: string = 'Port ' + port;
 
   // handle specific listen errors with friendly messages
-  switch (error.code) {
+  switch (code) {
     case 'EACCES':
       logger.error(bind + ' requires elevated privileges');
       process.exit(1);
