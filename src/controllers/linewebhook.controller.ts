@@ -1,5 +1,9 @@
-import { Request, Response } from 'express';
-import { WebhookEvent, WebhookRequestBody } from '@line/bot-sdk';
+import { Request, Response, NextFunction } from 'express';
+import {
+  LINE_SIGNATURE_HTTP_HEADER_NAME,
+  WebhookEvent,
+  WebhookRequestBody,
+} from '@line/bot-sdk';
 import logger from 'libs/winston';
 
 import LineService from 'services/line.service';
@@ -27,5 +31,25 @@ export default class LineWebhookController {
       error: false,
       data: { results },
     });
+  };
+  public static verifyRequest = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): void => {
+    const signature = req.headers[LINE_SIGNATURE_HTTP_HEADER_NAME] as string;
+    if (!signature) {
+      logger.error('no signeture.');
+      next(new Error('no signature'));
+      return;
+    }
+
+    const signedBody = LineService.createSignature(req.body);
+    if (signature !== signedBody) {
+      logger.error('signature validation failed.', { signature });
+      next(new Error('signature validation failed'));
+      return;
+    }
+    next();
   };
 }

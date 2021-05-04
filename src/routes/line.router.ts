@@ -1,16 +1,11 @@
 import { Router } from 'express';
-import { middleware, MiddlewareConfig } from '@line/bot-sdk';
 import LineWebhookController from 'controllers/linewebhook.controller';
 
 const lineRouter: Router = Router();
 
-const middlewareConfig: MiddlewareConfig = {
-  channelAccessToken: process.env.LINE_CHANNEL_ACCESS_TOKEN,
-  channelSecret: process.env.LINE_CHANNEL_SECRET || '',
-};
+lineRouter.use(LineWebhookController.verifyRequest);
 
-lineRouter.use(middleware(middlewareConfig));
-
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 lineRouter.post('/webhook', LineWebhookController.index);
 
 export default lineRouter;

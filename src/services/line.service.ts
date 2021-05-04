@@ -6,6 +6,7 @@ import {
   TextMessage,
   WebhookEvent,
 } from '@line/bot-sdk';
+import LineRepository from 'repositories/line.repository';
 import logger from 'libs/winston';
 
 export default class LineService {
@@ -14,6 +15,15 @@ export default class LineService {
     channelSecret: process.env.LINE_CHANNEL_SECRET,
   };
   protected static client: Client = new Client(LineService.config);
+
+  public static createSignature(
+    target: string | Record<string, unknown>
+  ): string {
+    if (typeof target === 'object') {
+      target = JSON.stringify(target);
+    }
+    return LineRepository.signWithSecret(target);
+  }
 
   public static async handleEvent(
     event: WebhookEvent
