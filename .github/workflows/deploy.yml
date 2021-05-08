@@ -7,7 +7,6 @@ on:
   workflow_run:
     workflows:
       - test
-      - lint
     branches:
       - master
       - develop
@@ -31,3 +30,4 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_COLOR: ${{ job.status }}
+          SLACK_MESSAGE: ${{ github.event.head_commit.message }}
