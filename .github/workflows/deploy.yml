@@ -1,0 +1,28 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Deploy to heroku
+
+on:
+  workflow_run:
+    workflows:
+      - test
+      - lint
+    branches:
+      - master
+      - develop
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "lica-line"
+          heroku_email: "dev@d-salt.net"
+          healthcheck: "https://lica-line.herokuapp.com/api/version"
+          rollbackonhealthcheckfailed: true
