@@ -19,7 +19,7 @@
     "lint:fix": "eslint src --ext .js,.ts --fix",
     "format": "prettier --write src",
     "test": "NODE_ENV=test mocha -r ts-node/register,dotenv/config,tsconfig-paths/register tests/**/*.ts",
-    "coverage": "NODE_ENV=test nyc mocha -r ts-node/register,dotenv/config,tsconfig-paths/register tests/**/*.ts",
+    "coverage": "NODE_ENV=test nyc --reporter=lcov --reporter=text mocha -r ts-node/register,dotenv/config,tsconfig-paths/register tests/**/*.ts",
     "prepare": "husky install"
   },
   "dependencies": {
